@@ -89,3 +89,15 @@ bar {
                 urgent_workspace   #f38ba8 #f38ba8 #11111b
         }
 }
+
+# A heavily customized, sleek Catppuccin-themed circle indicator
+bindsym $mod+Shift+s exec "i3lock \
+  --inside-color=1e1e2e00 \
+  --ring-color=89b4fa \
+  --keyhl-color=f38ba8 \
+  --line-uses-ring \
+  --separator-color=00000000 \
+  --verif-text='Verifying...' \
+  --wrong-text='Wrong!' \
+  --clock --indicator && systemctl suspend"
+
