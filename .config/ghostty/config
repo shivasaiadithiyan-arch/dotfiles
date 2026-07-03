@@ -1,0 +1,5 @@
+# Make the background slightly transparent
+background-opacity = 0.85
+
+# Optional: Add a frosted glass effect (requires a compositor like picom in i3)
+background-blur = 16
