@@ -1,12 +1,7 @@
 # --- AUTOSTART ANCILLARY PROGRAMS ---
 # Core desktop layout and rendering (runs on every config reload)
-exec_always --no-startup-id feh --bg-fill ~/Downloads/wallpaper/ghost_cod.jpg  
+exec_always --no-startup-id feh --bg-fill ~/Downloads/wallpaper/bbm.jpg  
 exec_always --no-startup-id picom -b
-
-# Launch system settings apps on startup (only runs once on login)
-exec --no-startup-id pavucontrol
-exec --no-startup-id blueman-manager
-exec --no-startup-id arandr
 
 # --- CONFIGURATION VARIABLES ---
 set $mod Mod4

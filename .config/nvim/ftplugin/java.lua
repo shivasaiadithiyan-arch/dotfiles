@@ -2,7 +2,7 @@ local opts = { buffer = true, remap = false, desc = "" }
 
 opts.desc = "Run current Java file"
 vim.keymap.set("n", "<F5>", function()
-    vim.cmd("split | terminal java %")
+    vim.cmd("split | terminal javac *.java && java %:r")
 end, opts)
 
 opts.desc = "Run Spring Boot application"

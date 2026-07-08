@@ -6,7 +6,7 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = { },
+    ensure_installed = { "gopls", "pyright", "jdtls", "lua_ls"},
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup({})
@@ -21,7 +21,7 @@ cmp.setup({
 
 	    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
 	    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
+        ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
 	    ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
 	    ['<CR>'] = cmp.mapping.confirm({ select = true }),
 	    ['<C-Space>'] = cmp.mapping.complete(),
