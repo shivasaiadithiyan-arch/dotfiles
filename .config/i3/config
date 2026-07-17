@@ -3,6 +3,17 @@
 exec_always --no-startup-id feh --bg-fill ~/Downloads/wallpaper/bbm.jpg  
 exec_always --no-startup-id picom -b
 
+# Lock automatically on sleep / suspend events
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock \
+  --inside-color=1e1e2e00 \
+  --ring-color=89b4fa \
+  --keyhl-color=f38ba8 \
+  --line-uses-ring \
+  --separator-color=00000000 \
+  --verif-text='Verifying...' \
+  --wrong-text='Wrong!' \
+  --clock --indicator --nofork
+
 # --- CONFIGURATION VARIABLES ---
 set $mod Mod4
 
@@ -46,6 +57,15 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+# Toggle fullscreen mode using the Up arrow key
+bindsym $mod+f fullscreen toggle
+
+# Shift focused tiled window using Arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Down move down
+
 # Core System Commands
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
@@ -67,6 +87,9 @@ bindsym $mod+Shift+l move right
 bindsym $mod+b split h
 bindsym $mod+v split v
 
+# Trigger a manual sleep event (xss-lock will catch this and lock first)
+bindsym $mod+Shift+s exec systemctl suspend
+
 # --- THE STATUS BAR ---
 bar {
         position bottom
@@ -84,15 +107,4 @@ bar {
                 urgent_workspace   #f38ba8 #f38ba8 #11111b
         }
 }
-
-# A heavily customized, sleek Catppuccin-themed circle indicator
-bindsym $mod+Shift+s exec "i3lock \
-  --inside-color=1e1e2e00 \
-  --ring-color=89b4fa \
-  --keyhl-color=f38ba8 \
-  --line-uses-ring \
-  --separator-color=00000000 \
-  --verif-text='Verifying...' \
-  --wrong-text='Wrong!' \
-  --clock --indicator && systemctl suspend"
 
