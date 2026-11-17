@@ -1,18 +1,14 @@
 # --- AUTOSTART ANCILLARY PROGRAMS ---
 # Core desktop layout and rendering (runs on every config reload)
-exec_always --no-startup-id feh --bg-fill ~/Downloads/wallpaper/bbm.jpg  
+exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY XAUTHORITY WAYLAND_DISPLAY
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets --daemonize
+exec_always --no-startup-id autorandr --change --default undocked
+exec_always --no-startup-id feh --bg-fill ~/Documents/wallpapers/punisher.jpg
 exec_always --no-startup-id picom -b
+exec --no-startup-id gammastep -O 3500
 
 # Lock automatically on sleep / suspend events
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock \
-  --inside-color=1e1e2e00 \
-  --ring-color=89b4fa \
-  --keyhl-color=f38ba8 \
-  --line-uses-ring \
-  --separator-color=00000000 \
-  --verif-text='Verifying...' \
-  --wrong-text='Wrong!' \
-  --clock --indicator --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.config/i3/lock.sh
 
 # --- CONFIGURATION VARIABLES ---
 set $mod Mod4
@@ -27,11 +23,80 @@ assign [class="Pavucontrol"] 9
 assign [class="Blueman-manager"] 9
 assign [class="Arandr"] 9
 
+# Pin workspaces to outputs: 1-3 on the external monitor, the rest on the
+# laptop panel. The trailing eDP-1 is a fallback, so 1-3 still open on the
+# laptop when no monitor is plugged in.
+workspace 1 output HDMI-1 eDP-1
+workspace 2 output HDMI-1 eDP-1
+workspace 3 output HDMI-1 eDP-1
+workspace 4 output eDP-1
+workspace 5 output eDP-1
+workspace 6 output eDP-1
+workspace 7 output eDP-1
+workspace 8 output eDP-1
+workspace 9 output eDP-1
+workspace 10 output eDP-1
+
+# --- STICKY NOTE ---
+# A nvim note that lives in i3's scratchpad: $mod+n toggles it in and out of
+# view over whatever is on screen. It keeps running while hidden, so it opens
+# instantly and holds its cursor position and undo history between peeks.
+for_window [class="com.sticky.note"] floating enable, resize set 960 640, move position center, move scratchpad, scratchpad show
+bindsym $mod+n exec --no-startup-id ~/.config/i3/sticky.sh
+
+# Park any window in the scratchpad, not just the sticky note. $mod+minus
+# cycles through everything parked there, the sticky note included.
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
 # --- KEYBINDINGS ---
 # Application Launchers
 bindsym $mod+Return exec ghostty
-bindsym $mod+Shift+w exec com.brave.Browser
+bindsym $mod+Shift+w exec brave
 bindsym $mod+d exec dmenu_run
+bindsym $mod+c exec --no-startup-id xdotool search --onlyvisible --class "Claude" windowactivate || claude-desktop --ozone-platform=x11 --disable-gpu --no-sandbox
+
+#Notification
+exec_always --no-startup-id dunst
+
+# CLIPBOARD
+exec_always --no-startup-id greenclip daemon
+
+# Screen Shot (Pipes raw PNG data instantly to your X11 system clipboard)
+bindsym Shift+Print exec --no-startup-id flameshot gui --raw | xclip -selection clipboard -t image/png
+
+# Volume and Brightness (laptop Fn keys)
+# wpctl targets whatever sink is currently default, so this follows the
+# headset/speaker switch automatically. Volume is capped at 100%.
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute        exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute     exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+# -n1 keeps the backlight from hitting 0 and blanking the screen entirely
+bindsym XF86MonBrightnessUp   exec --no-startup-id brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%- -n1
+
+# --- WINDOW MANAGEMENT ---
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# Resize mode: $mod+r, then arrows/hjkl; Escape or Enter to leave
+bindsym $mod+r mode "resize"
+mode "resize" {
+        bindsym h resize shrink width 5 px or 5 ppt
+        bindsym j resize grow height 5 px or 5 ppt
+        bindsym k resize shrink height 5 px or 5 ppt
+        bindsym l resize grow width 5 px or 5 ppt
+
+        bindsym Left  resize shrink width 5 px or 5 ppt
+        bindsym Down  resize grow height 5 px or 5 ppt
+        bindsym Up    resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
 
 # Navigate Workspace
 bindsym $mod+1 workspace 1
@@ -57,10 +122,10 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-# Toggle fullscreen mode using the Up arrow key
+# Toggle fullscreen
 bindsym $mod+f fullscreen toggle
 
-# Shift focused tiled window using Arrow keys
+# Shift focused window using Arrow keys
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Right move right
 bindsym $mod+Shift+Up move up
@@ -87,23 +152,22 @@ bindsym $mod+Shift+l move right
 bindsym $mod+b split h
 bindsym $mod+v split v
 
-# Trigger a manual sleep event (xss-lock will catch this and lock first)
-bindsym $mod+Shift+s exec systemctl suspend
-
+# Lock the screen
+bindsym $mod+Shift+s exec --no-startup-id ~/.config/i3/lock.sh
 # --- THE STATUS BAR ---
 bar {
         position bottom
         status_command i3status
         
         colors {
-                background #1e1e2e
+                background #000000
                 statusline #ffffff
                 separator  #6c7086
 
                 #                  border  bg      text
                 focused_workspace  #89b4fa #89b4fa #11111b
                 active_workspace   #313244 #313244 #cdd6f4
-                inactive_workspace #1e1e2e #1e1e2e #a6adc8
+                inactive_workspace #000000 #000000 #a6adc8
                 urgent_workspace   #f38ba8 #f38ba8 #11111b
         }
 }

@@ -1,0 +1,9 @@
+brave-bin
+claude-code
+claude-desktop
+i3lock-color
+rofi-greenclip
+rog-control-center-x11
+spotify
+supergfxctl
+yay
