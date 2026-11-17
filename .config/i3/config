@@ -1,7 +1,6 @@
 # --- AUTOSTART ANCILLARY PROGRAMS ---
 # Core desktop layout and rendering (runs on every config reload)
 exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY XAUTHORITY WAYLAND_DISPLAY
-exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets --daemonize
 exec_always --no-startup-id autorandr --change --default undocked
 exec_always --no-startup-id feh --bg-fill ~/Documents/wallpapers/punisher.jpg
 exec_always --no-startup-id picom -b
