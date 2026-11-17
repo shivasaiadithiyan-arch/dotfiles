@@ -13,6 +13,26 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 
 mkdir -p "$HOME/.config"
 
+# Home-level dotfiles, listed explicitly so the repo's own files (README.md,
+# install.sh, packages/, system/) are never linked into $HOME.
+HOME_FILES=(.xinitrc)
+
+for name in "${HOME_FILES[@]}"; do
+	src="$REPO/$name"
+	[ -e "$src" ] || continue
+	dest="$HOME/$name"
+
+	if [ -L "$dest" ]; then
+		rm "$dest"
+	elif [ -e "$dest" ]; then
+		mv "$dest" "$dest.bak-$STAMP"
+		echo "backed up  $dest -> $dest.bak-$STAMP"
+	fi
+
+	ln -s "$src" "$dest"
+	echo "linked     ~/$name -> $src"
+done
+
 for src in "$REPO"/.config/*; do
 	[ -e "$src" ] || continue
 	name="$(basename "$src")"
@@ -30,4 +50,5 @@ for src in "$REPO"/.config/*; do
 done
 
 echo
-echo "Done. Next: see README.md for the package install and post-link steps."
+echo "Done. Next: see README.md for the package install, the /etc/pam.d/login"
+echo "keyring lines, and the post-link steps."

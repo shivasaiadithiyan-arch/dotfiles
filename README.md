@@ -12,8 +12,10 @@ configs are linked into place.
 .config/i3/          i3wm config + lock.sh + sticky.sh
 .config/i3status/    status bar
 .config/ghostty/     terminal
+.xinitrc             starts i3 on the systemd user bus (no dbus-launch)
 packages/            package lists captured from a working machine
-install.sh           symlinks .config/* into ~/.config, backing up what's there
+system/              root-owned files to apply by hand (keyring PAM lines)
+install.sh           symlinks the configs and .xinitrc into place
 ```
 
 ## Fresh machine
@@ -34,6 +36,9 @@ git clone https://github.com/shivasaiadithiyan-arch/dotfiles.git ~/dotfiles
 
 # 4. enable display hotplug switching
 sudo systemctl enable --now autorandr.service
+
+# 5. keyring unlock at login -- see system/keyring-pam.md, applied by hand
+#    (not symlinked: PAM must not read config from a user-writable repo)
 ```
 
 Then start i3 and launch `nvim` once: lazy.nvim bootstraps itself and installs
