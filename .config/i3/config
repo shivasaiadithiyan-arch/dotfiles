@@ -12,6 +12,11 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- ~/.config/i3/lock.sh
 # --- CONFIGURATION VARIABLES ---
 set $mod Mod4
 
+# Always open new windows to the right, not below. Without this i3 uses
+# `auto`, which splits along the container's longer side -- and a container
+# that has been split vertically once keeps opening windows downwards.
+default_orientation horizontal
+
 # Use clean 2px borders with no titlebars
 default_border pixel 2
 default_floating_border pixel 2
