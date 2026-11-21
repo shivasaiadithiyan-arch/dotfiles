@@ -18,6 +18,8 @@ if i3-msg -t get_tree | grep -q "\"class\":\"$CLASS\""; then
 	i3-msg "[class=\"$CLASS\"] scratchpad show" >/dev/null
 else
 	mkdir -p "$(dirname "$NOTE")"
-	# Start at the end of the file, in insert mode, ready to type.
-	exec ghostty --class="$CLASS" -e nvim '+normal G$' "$NOTE"
+	# noswapfile: this is a scratch note, and a leftover swap from a crashed or
+	# orphaned instance would otherwise greet you with a recovery prompt instead
+	# of the note.
+	exec ghostty --class="$CLASS" -e nvim --cmd 'set noswapfile' '+normal G$' "$NOTE"
 fi
