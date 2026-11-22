@@ -220,8 +220,18 @@ require('lazy').setup {
     event = 'VeryLazy',
     opts = {},
     keys = {
-      { 's', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Flash' },
-      { 'S', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Flash Treesitter' },
+      {
+        's',
+        mode = { 'n', 'x', 'o' },
+        function() require('flash').jump() end,
+        desc = 'Flash',
+      },
+      {
+        'S',
+        mode = { 'n', 'x', 'o' },
+        function() require('flash').treesitter() end,
+        desc = 'Flash Treesitter',
+      },
     },
   },
 
@@ -533,17 +543,62 @@ require('lazy').setup {
     -- Keys live under <leader>d: the F-keys kickstart suggests are already
     -- taken by the per-language run/test/build maps in after/ftplugin/.
     keys = {
-      { '<leader>dc', function() require('dap').continue() end, desc = 'Start/continue' },
-      { '<leader>db', function() require('dap').toggle_breakpoint() end, desc = 'Toggle breakpoint' },
-      { '<leader>dB', function() require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ') end, desc = 'Conditional breakpoint' },
-      { '<leader>di', function() require('dap').step_into() end, desc = 'Step into' },
-      { '<leader>do', function() require('dap').step_over() end, desc = 'Step over' },
-      { '<leader>dO', function() require('dap').step_out() end, desc = 'Step out' },
-      { '<leader>dt', function() require('dap').terminate() end, desc = 'Terminate' },
-      { '<leader>du', function() require('dapui').toggle() end, desc = 'Toggle debug UI' },
-      { '<leader>dr', function() require('dap').run_last() end, desc = 'Re-run last' },
-      { '<leader>dR', function() require('dap').repl.toggle() end, desc = 'Toggle REPL' },
-      { '<leader>dh', function() require('dap.ui.widgets').hover() end, mode = { 'n', 'v' }, desc = 'Inspect value under cursor' },
+      {
+        '<leader>dc',
+        function() require('dap').continue() end,
+        desc = 'Start/continue',
+      },
+      {
+        '<leader>db',
+        function() require('dap').toggle_breakpoint() end,
+        desc = 'Toggle breakpoint',
+      },
+      {
+        '<leader>dB',
+        function() require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ') end,
+        desc = 'Conditional breakpoint',
+      },
+      {
+        '<leader>di',
+        function() require('dap').step_into() end,
+        desc = 'Step into',
+      },
+      {
+        '<leader>do',
+        function() require('dap').step_over() end,
+        desc = 'Step over',
+      },
+      {
+        '<leader>dO',
+        function() require('dap').step_out() end,
+        desc = 'Step out',
+      },
+      {
+        '<leader>dt',
+        function() require('dap').terminate() end,
+        desc = 'Terminate',
+      },
+      {
+        '<leader>du',
+        function() require('dapui').toggle() end,
+        desc = 'Toggle debug UI',
+      },
+      {
+        '<leader>dr',
+        function() require('dap').run_last() end,
+        desc = 'Re-run last',
+      },
+      {
+        '<leader>dR',
+        function() require('dap').repl.toggle() end,
+        desc = 'Toggle REPL',
+      },
+      {
+        '<leader>dh',
+        function() require('dap.ui.widgets').hover() end,
+        mode = { 'n', 'v' },
+        desc = 'Inspect value under cursor',
+      },
       {
         '<leader>dT',
         function()
@@ -592,6 +647,16 @@ require('lazy').setup {
       dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
       require('dap-go').setup {
+        dap_configurations = {
+          {
+            type = 'go',
+            name = 'smedis: debug server (port 6390, pick a folder)',
+            request = 'launch',
+            program = '${workspaceFolder}',
+            cwd = function() return vim.fn.input('Run in folder: ', vim.fn.getcwd() .. '/data/snapshot-load', 'dir') end,
+            env = { SMEDIS_PORT = '6390' },
+          },
+        },
         delve = { detached = vim.fn.has 'win32' == 0 },
       }
 
@@ -603,7 +668,13 @@ require('lazy').setup {
       -- Breakpoint signs: red dot for a breakpoint, arrow for the stopped line.
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
       vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-      for name, icon in pairs { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '▶' } do
+      for name, icon in pairs {
+        Breakpoint = '●',
+        BreakpointCondition = '⊜',
+        BreakpointRejected = '⊘',
+        LogPoint = '◆',
+        Stopped = '▶',
+      } do
         local hl = (name == 'Stopped') and 'DapStop' or 'DapBreak'
         vim.fn.sign_define('Dap' .. name, { text = icon, texthl = hl, numhl = hl })
       end
