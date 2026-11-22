@@ -48,6 +48,13 @@ workspace 10 output eDP-1
 for_window [class="com.sticky.note"] floating enable, resize set 960 640, move position center, move scratchpad, scratchpad show
 bindsym $mod+n exec --no-startup-id ~/.config/i3/sticky.sh
 
+# --- BUDGET SHEET ---
+# The same scratchpad trick for the expense tracker: $mod+e toggles a nvim
+# session on ~/notes/budget/ledger.md, which behaves like a spreadsheet
+# (live totals in the winbar, <leader>bs for the month's breakdown).
+for_window [class="com.budget.sheet"] floating enable, resize set 1200 740, move position center, move scratchpad, scratchpad show
+bindsym $mod+e exec --no-startup-id ~/.config/i3/budget.sh
+
 # Park any window in the scratchpad, not just the sticky note. $mod+minus
 # cycles through everything parked there, the sticky note included.
 bindsym $mod+Shift+minus move scratchpad

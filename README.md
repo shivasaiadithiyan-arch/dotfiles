@@ -9,7 +9,7 @@ configs are linked into place.
 
 ```
 .config/nvim/        neovim (kickstart.nvim fork, single init.lua)
-.config/i3/          i3wm config + lock.sh + sticky.sh
+.config/i3/          i3wm config + lock.sh + sticky.sh + budget.sh
 .config/i3status/    status bar
 .config/ghostty/     terminal
 .xinitrc             starts i3 on the systemd user bus (no dbus-launch)
@@ -71,8 +71,10 @@ debug adapters listed in `init.lua`. Give it a minute and check `:Lazy` and
 | `$mod+n` | sticky note (nvim scratchpad, toggles in and out of view) |
 | `$mod+minus` | cycle windows parked in the i3 scratchpad |
 | `$mod+Shift+minus` | park the focused window in the scratchpad |
-| `$mod+e` / `\` (nvim) | file explorer / reveal current file |
+| `$mod+e` | budget sheet (nvim scratchpad, same toggle as the note) |
+| `<space>e` / `\` (nvim) | file explorer / reveal current file |
 | `<space>g...` (nvim) | git hunks: `gd` diff, `gp` preview, `gs` stage, `gr` reset |
 | `<space>d...` (nvim) | debugger: `db` breakpoint, `dc` start/continue, `du` UI |
+| `<space>b...` (budget) | `ba` add one, `bi` add many, `bs` month summary, `by` year, `br` repeat today |
 | `<space>u` (nvim) | undo tree |
 | `<space>rn` (nvim) | LSP rename across the project |

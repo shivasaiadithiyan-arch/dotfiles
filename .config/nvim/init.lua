@@ -697,3 +697,7 @@ require('lazy').setup {
     end,
   },
 }
+
+-- Budget tracker: a markdown-table ledger that behaves like a spreadsheet.
+-- Toggled from i3 with $mod+e; see lua/budget.lua for the keymaps.
+require('budget').setup()
